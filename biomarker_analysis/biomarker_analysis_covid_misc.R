@@ -76,13 +76,8 @@ colnames(df_v112_and_biomarkers_selec)<-sample_names_to_record
 ####this step is very important, set the Inf entries to 0
 df_v112_and_biomarkers_selec[grep("Inf",df_v112_and_biomarkers_selec)]<-0
 
-#dim(df_v112_and_biomarkers_selec)
-#57 168
 
 #####Start subsetting df_v112_and_biomarkers_selec here for separate analyses
-
-
-
 
 ####which samples have cortico dates?
 ind_col_cortico_dates<-which(colnames(df_v112_and_biomarkers_selec) %in% df_samples_with_cortico_dates$Sample_name)
@@ -100,9 +95,6 @@ df_v112_and_biomarkers_selec_cortico_scaled<-scale(dum, center = FALSE, scale=TR
 rownames(df_v112_and_biomarkers_selec_cortico_scaled)<-gene_names
 
 #The GENIE3 algorithm outputs a matrix containing the weights of the putative regulatory links, with higher #weights corresponding to more likely regulatory links. weightMat[i,j] is the weight of the link directed #from the i-th gene to j-th gene
-
-
-
 
 set.seed(123)
 #Glucocorticoid interval,time interval,TRBV11-2 usage are the non-biomarker variables
@@ -198,17 +190,8 @@ network_cortico_ivig_scaled_to_plot<-network_cortico_ivig_scaled[selected_intera
 network_cortico_ivig_scaled_to_plot[which(network_cortico_ivig_scaled_to_plot=="-Inf")]<-0
 
 
+p_network_cortico_ivig_scaled<-ggballoonplot(network_cortico_ivig_scaled_to_plot, fill = "value",xlab="Targets",ylab="Predictors",main = "Pairwise interaction strengths derived from random forest regression (x-axis:predictors & y-axis:targets) \nInput data: 52 samples with steroid+IVIG treatment timeline data \n (Top 50th percentile predictors of TRBV11-2 usage)",size.range = c(1,5))+scale_fill_gradientn(colors = my_cols)
 
-
-p_network_cortico_ivig_scaled<-ggballoonplot(network_cortico_ivig_scaled_to_plot, fill = "value",xlab="Targets",ylab="Predictors",main = "Pairwise interaction strengths derived from random forest regression (x-axis:predictors & y-axis:targets) \nInput data: 52 samples with steroid+IVIG treatment timeline data \n (Top 50th percentile predictors of TRBV11-2 usage)",size.range = c(1,5))+scale_fill_gradientn(colors = my_cols)   #c("blue", "white", "red")
- #\n, , inputs are scaled
-
-
-
-
-##############
-##############
-##############
 ################################
 ######CORTICO+NO IVIG#######
 ################################
@@ -240,7 +223,6 @@ correl_cortico_no_ivig_scaled<-as.data.frame(correl_cortico_no_ivig_scaled[["r"]
 correl_cortico_no_ivig_scaled_sign<-apply(correl_cortico_no_ivig_scaled,c(1,2), func_sign)
 
 
-
 links_network_cortico_no_ivig_scaled_target_usage<-links_network_cortico_no_ivig_scaled[which(links_network_cortico_no_ivig_scaled$targetGene=="TRBV11-2 usage"),]
 
 thres_0p5<-quantile(links_network_cortico_no_ivig_scaled_target_usage$weight, probs = c(0.50))
@@ -255,8 +237,7 @@ network_cortico_no_ivig_scaled_to_plot<-network_cortico_no_ivig_scaled[selected_
 network_cortico_no_ivig_scaled_to_plot[which(network_cortico_no_ivig_scaled_to_plot=="-Inf")]<-0
 
 
-
-p_network_cortico_no_ivig_scaled<-ggballoonplot(network_cortico_no_ivig_scaled_to_plot, fill = "value",xlab="Targets",ylab="Predictors",main = "Pairwise interaction strengths derived from random forest regression (x-axis:predictors & y-axis:targets) \nInput data: 40 samples with steroid (but no IVIG) treatment timeline data \n (Top 50th percentile predictors of TRBV11-2 usage)",size.range = c(1,5))+scale_fill_gradientn(colors = my_cols)   #c("blue", "white", "red")
+p_network_cortico_no_ivig_scaled<-ggballoonplot(network_cortico_no_ivig_scaled_to_plot, fill = "value",xlab="Targets",ylab="Predictors",main = "Pairwise interaction strengths derived from random forest regression (x-axis:predictors & y-axis:targets) \nInput data: 40 samples with steroid (but no IVIG) treatment timeline data \n (Top 50th percentile predictors of TRBV11-2 usage)",size.range = c(1,5))+scale_fill_gradientn(colors = my_cols)
 
 ####################################
 ####################################
@@ -323,22 +304,10 @@ network_cortico_nousage_scaled_to_plot<-network_cortico_nousage_scaled[selected_
 network_cortico_nousage_scaled_to_plot[which(network_cortico_nousage_scaled_to_plot=="-Inf")]<-0
 
 
-p_network_cortico_nousage_scaled<-ggballoonplot(network_cortico_nousage_scaled_to_plot, fill = "value",xlab="Targets",ylab="Predictors",main = "Pairwise interaction strengths derived from random forest regression (x-axis:predictors & y-axis:targets) \nInput data: 161 samples with steroid treatment timeline data",size.range = c(1,5))+scale_fill_gradientn(colors = my_cols)   #c("blue", "white", "red")
- #\n, , inputs are scaled
-
-
- # pdf(file = "network_cortico_nousage_scaled_interaction_strengths_biomarkers_vs_V11-2_usage_scaled_inputs_nov11.pdf", width=11, height=12)
- # ggpar(p_network_cortico_nousage_scaled,font.xtickslab= c(10, "plain", "black"),font.ytickslab= c(10, "plain", "black"), orientation = "horiz",font.main = c(10,"bold"),font.legend = c(8))
- # # #if no orientation = "horiz", we have x-axis:targets and y-axis:predictors
- # dev.off()#,font.x = c(10),font.y = c(10)
+p_network_cortico_nousage_scaled<-ggballoonplot(network_cortico_nousage_scaled_to_plot, fill = "value",xlab="Targets",ylab="Predictors",main = "Pairwise interaction strengths derived from random forest regression (x-axis:predictors & y-axis:targets) \nInput data: 161 samples with steroid treatment timeline data",size.range = c(1,5))+scale_fill_gradientn(colors = my_cols)
 
 
  col2 = colorRampPalette(c("#0D0887FF", "#6A00A8FF", "#B12A90FF","#E16462FF", "#FCA636FF", "#F0F921FF"))
-
- # pdf(file = "network_cortico_nousage_scaled_corrplot_nov11.pdf", width=11, height=12)
- # corrplot(as.matrix(correl_cortico_nousage_scaled[selected_interactors_cortico,selected_interactors_cortico]),col = col2(200),diag=FALSE,method="circle",tl.cex=0.9,tl.col="black",cl.ratio=0.2,cl.cex=0.9,number.cex=0.9, title = "Pearson correlation coefficient values (161 samples with steroid treatment timeline data)", mar=c(0,0,2,0), order = 'hclust', addrect = 2)
- # dev.off()
-
 
  #################
  #################
@@ -394,7 +363,7 @@ dum<-as.matrix(sapply(dum, as.numeric))
 
 
 df_v112_and_biomarkers_selec_cortico_no_ivig_nousage_scaled<-scale(dum, center = FALSE, scale=TRUE)
-  rownames(df_v112_and_biomarkers_selec_cortico_no_ivig_nousage_scaled)<-gene_names
+rownames(df_v112_and_biomarkers_selec_cortico_no_ivig_nousage_scaled)<-gene_names
 
 
 set.seed(123)
@@ -405,7 +374,6 @@ links_network_cortico_no_ivig_nousage_scaled<-getLinkList(network_cortico_no_ivi
 
 correl_cortico_no_ivig_nousage_scaled<-corr.test(t(df_v112_and_biomarkers_selec_cortico_no_ivig_nousage_scaled),  use = "pairwise",method="pearson",adjust="none", alpha=.05,ci=TRUE)
 correl_cortico_no_ivig_nousage_scaled<-as.data.frame(correl_cortico_no_ivig_nousage_scaled[["r"]])
-
 
 
 correl_cortico_no_ivig_nousage_scaled_sign<-apply(correl_cortico_no_ivig_nousage_scaled,c(1,2), func_sign)
@@ -441,10 +409,7 @@ data_network_cortico_ivig_nousage_scaled<-data_network_cortico_ivig_nousage_scal
 colnames(data_network_cortico_ivig_nousage_scaled)[c(1,2)]<-c("predictor","target")
 
 
-
-
 data_network_cortico_ivig_nousage_scaled<-data_network_cortico_ivig_nousage_scaled[order(-data_network_cortico_ivig_nousage_scaled$value),]
-
 
 
 p_network_cortico_no_ivig_nousage_scaled<-ggballoonplot(network_cortico_no_ivig_nousage_scaled_to_plot, fill = "value",xlab="Targets",ylab="Predictors",main = "Pairwise interaction strengths derived from random forest regression (x-axis:predictors & y-axis:targets) \nInput data: Samples with steroid (but no IVIG) treatment timeline data",size.range = c(1,5))+scale_fill_gradientn(colors = my_cols)
@@ -648,7 +613,6 @@ rownames(Fig_3g)<-c(1:nrow(Fig_3g))
 
 ind_remov<-match("TRBV11-2 usage",rownames(df_median_predictor_strength))
 df_median_predictor_strength<-df_median_predictor_strength[-ind_remov,]
-
 
 
 Supp_4a<-corrplot(as.matrix(correl_cortico_no_ivig_nousage_scaled[selected_interactors_cortico_no_ivig_nousage,selected_interactors_cortico_no_ivig_nousage]),col = col2(200),diag=FALSE,method="circle",tl.cex=0.9,tl.col="black",cl.ratio=0.2,cl.cex=0.9,number.cex=0.9, title = "Pearson correlation coefficients (57 samples with steroid (but no IVIG) treatment timeline data)", mar=c(0,0,2,0), order = 'hclust', addrect = 2)
