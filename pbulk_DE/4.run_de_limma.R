@@ -7,7 +7,7 @@ library(edgeR)
 #############################
 source("pbulk_DE/util/limma_DE_functions.R")
 
-DGELIST_IN_PATH <- "pbulk_DE/sample_groups/"
+DGELIST_IN_PATH <- "output/pbulk_DE/sample_groups/"
 SAMPLE_GROUP <- c("tso_within_d40_misc_plus_healthy/", 
                   "tso_within_d40_covid_plus_healthy/", 
                   "tso_within_d40_misc_plus_covid/",
@@ -19,7 +19,7 @@ PATIENT_ID_COL <- "Subject"
 ### MIS-C vs HC d40 #####
 #########################
 dge_Unsort <- readRDS(paste0(DGELIST_IN_PATH, SAMPLE_GROUP[1], "pseudobulk_dgelists_normalized/", "UnSort-mergedcelltype.rds"))
-design_Unsort <- readRDS(paste0(DGELIST_IN_PATH, SAMPLE_GROUP[1], "results/", "UnSort_misc_vs_healthy_design.rds"))
+design_Unsort <- readRDS(paste0(DGELIST_IN_PATH, SAMPLE_GROUP[1], "UnSort_misc_vs_healthy_design.rds"))
 
 dge <- dge_Unsort
 design <- design_Unsort
@@ -42,7 +42,7 @@ fit.list[[i]] <- fit
 }
 ###
 
-saveRDS(fit.list, "pbulk_DE/sample_groups/tso_within_d40_misc_plus_healthy/results/UnSort_misc_vs_healthy_fit.rds")
+saveRDS(fit.list, "output/pbulk_DE/sample_groups/tso_within_d40_misc_plus_healthy/UnSort_misc_vs_healthy_fit.rds")
 
 
 
@@ -50,7 +50,7 @@ saveRDS(fit.list, "pbulk_DE/sample_groups/tso_within_d40_misc_plus_healthy/resul
 ### COVID vs HC d40 #####
 #########################
 dge_Unsort <- readRDS(paste0(DGELIST_IN_PATH, SAMPLE_GROUP[2], "pseudobulk_dgelists_normalized/", "UnSort-mergedcelltype.rds"))
-design_Unsort <- readRDS(paste0(DGELIST_IN_PATH, SAMPLE_GROUP[2], "results/", "UnSort_covid_vs_healthy_design.rds"))
+design_Unsort <- readRDS(paste0(DGELIST_IN_PATH, SAMPLE_GROUP[2], "UnSort_covid_vs_healthy_design.rds"))
 
 dge <- dge_Unsort
 design <- design_Unsort
@@ -73,7 +73,7 @@ for (i in celltypes) {
 }
 ###
 
-saveRDS(fit.list, "pbulk_DE/sample_groups/tso_within_d40_covid_plus_healthy/results/UnSort_covid_vs_healthy_fit.rds")
+saveRDS(fit.list, "output/pbulk_DE/sample_groups/tso_within_d40_covid_plus_healthy/UnSort_covid_vs_healthy_fit.rds")
 
 
 
@@ -81,7 +81,7 @@ saveRDS(fit.list, "pbulk_DE/sample_groups/tso_within_d40_covid_plus_healthy/resu
 ### MIS-C vs COVID d40 #####
 ############################
 dge_Unsort <- readRDS(paste0(DGELIST_IN_PATH, SAMPLE_GROUP[3], "pseudobulk_dgelists_normalized/", "UnSort-mergedcelltype.rds"))
-design_Unsort <- readRDS(paste0(DGELIST_IN_PATH, SAMPLE_GROUP[3], "results/", "UnSort_misc_vs_covid_design.rds"))
+design_Unsort <- readRDS(paste0(DGELIST_IN_PATH, SAMPLE_GROUP[3], "UnSort_misc_vs_covid_design.rds"))
 
 dge <- dge_Unsort
 design <- design_Unsort
@@ -104,7 +104,7 @@ for (i in celltypes) {
 }
 ###
 
-saveRDS(fit.list, "pbulk_DE/sample_groups/tso_within_d40_misc_plus_covid/results/UnSort_misc_vs_covid_fit.rds")
+saveRDS(fit.list, "output/pbulk_DE/sample_groups/tso_within_d40_misc_plus_covid/UnSort_misc_vs_covid_fit.rds")
 
 
 
@@ -114,7 +114,7 @@ saveRDS(fit.list, "pbulk_DE/sample_groups/tso_within_d40_misc_plus_covid/results
 #######################################
 
 dge_Unsort <- readRDS(paste0(DGELIST_IN_PATH, SAMPLE_GROUP[4], "pseudobulk_dgelists_normalized/", "UnSort-mergedcelltype.rds"))
-design_Unsort <- readRDS(paste0(DGELIST_IN_PATH, SAMPLE_GROUP[4], "results/", "UnSort_days_onset_design.rds"))
+design_Unsort <- readRDS(paste0(DGELIST_IN_PATH, SAMPLE_GROUP[4], "UnSort_days_onset_design.rds"))
 
 dge <- dge_Unsort
 design <- design_Unsort
@@ -139,7 +139,7 @@ for (i in celltypes) {
 }
 ###
 
-saveRDS(fit.list, "pbulk_DE/sample_groups/all_timepoints_misc_only/results/UnSort_days_onset_fit.rds")
+saveRDS(fit.list, "output/pbulk_DE/sample_groups/all_timepoints_misc_only/UnSort_days_onset_fit.rds")
 
 
 #######################################
@@ -147,7 +147,7 @@ saveRDS(fit.list, "pbulk_DE/sample_groups/all_timepoints_misc_only/results/UnSor
 #######################################
 
 dge_Unsort <- readRDS(paste0(DGELIST_IN_PATH, SAMPLE_GROUP[5], "pseudobulk_dgelists_normalized/", "UnSort-mergedcelltype.rds"))
-design_Unsort <- readRDS(paste0(DGELIST_IN_PATH, SAMPLE_GROUP[5], "results/", "UnSort_days_onset_design.rds"))
+design_Unsort <- readRDS(paste0(DGELIST_IN_PATH, SAMPLE_GROUP[5], "UnSort_days_onset_design.rds"))
 
 dge <- dge_Unsort
 design <- design_Unsort
@@ -172,5 +172,5 @@ for (i in celltypes) {
 }
 ###
 
-saveRDS(fit.list, "pbulk_DE/sample_groups/all_timepoints_covid_only/results/UnSort_days_onset_fit.rds")
+saveRDS(fit.list, "output/pbulk_DE/sample_groups/all_timepoints_covid_only/UnSort_days_onset_fit.rds")
 

@@ -10,7 +10,7 @@ library(edgeR)
 
 source("pbulk_DE/util/pbulk_pooling_functions.R")
 SEURAT_IN_PATH <- "input/"
-DGELISTS_OUT_PATH <- "pbulk_DE/all_samples/pseudobulk_dgelists_unfiltered/"
+DGELISTS_OUT_PATH <- "output/pbulk_DE/all_samples/pseudobulk_dgelists_unfiltered/"
 dir.create(DGELISTS_OUT_PATH, recursive = TRUE)
 
 # Sample filtering parameters
@@ -32,8 +32,6 @@ keep_cells_UnSort <- WhichCells(merged, expression = Sorted == KEEP_SORTED[1])
 keep_cells_Sort <- WhichCells(merged, expression = Sorted == KEEP_SORTED[2])
 
 seurat_obj <- subset(merged, cells = keep_cells_UnSort)
-seurat_obj <- subset(merged, cells = keep_cells_Sort)
-seurat_obj <- merged
 
 meta <- seurat_obj@meta.data
 
@@ -80,20 +78,18 @@ print("n_samples_per_celltype after final filtering")
 print(n_samples_per_celltype)
 
 saveRDS(pseudobulk_list_libfiltered, paste0(DGELISTS_OUT_PATH, "UnSort-mergedcelltype.rds"))
-saveRDS(pseudobulk_list_libfiltered, paste0(DGELISTS_OUT_PATH, "Sort-mergedcelltype.rds"))
-saveRDS(pseudobulk_list_libfiltered, paste0(DGELISTS_OUT_PATH, "UnSortandSort-mergedcelltype.rds"))
 
 
 ##############################################
 ### subset pseudobulk Timepoint ##############
 ##############################################
-PBULKLIST_IN_PATH = "pbulk_DE/all_samples/pseudobulk_dgelists_unfiltered/"
-PBULKLIST_OUT_PATH = "pbulk_DE/sample_groups/"
-dir.create("pbulk_DE/sample_groups/tso_within_d40_misc_plus_healthy/pseudobulk_dgelists_unfiltered/", recursive = TRUE)
-dir.create("pbulk_DE/sample_groups/tso_within_d40_covid_plus_healthy/pseudobulk_dgelists_unfiltered/", recursive = TRUE)
-dir.create("pbulk_DE/sample_groups/tso_within_d40_misc_plus_covid/pseudobulk_dgelists_unfiltered/", recursive = TRUE)
-dir.create("pbulk_DE/sample_groups/all_timepoints_misc_only/pseudobulk_dgelists_unfiltered/", recursive = TRUE)
-dir.create("pbulk_DE/sample_groups/all_timepoints_covid_only/pseudobulk_dgelists_unfiltered/", recursive = TRUE)
+PBULKLIST_IN_PATH = "output/pbulk_DE/all_samples/pseudobulk_dgelists_unfiltered/"
+PBULKLIST_OUT_PATH = "output/pbulk_DE/sample_groups/"
+dir.create("output/pbulk_DE/sample_groups/tso_within_d40_misc_plus_healthy/pseudobulk_dgelists_unfiltered/", recursive = TRUE)
+dir.create("output/pbulk_DE/sample_groups/tso_within_d40_covid_plus_healthy/pseudobulk_dgelists_unfiltered/", recursive = TRUE)
+dir.create("output/pbulk_DE/sample_groups/tso_within_d40_misc_plus_covid/pseudobulk_dgelists_unfiltered/", recursive = TRUE)
+dir.create("output/pbulk_DE/sample_groups/all_timepoints_misc_only/pseudobulk_dgelists_unfiltered/", recursive = TRUE)
+dir.create("output/pbulk_DE/sample_groups/all_timepoints_covid_only/pseudobulk_dgelists_unfiltered/", recursive = TRUE)
 
 # ---1
 pbulklist <- readRDS(paste0(PBULKLIST_IN_PATH, "UnSort-mergedcelltype.rds"))
@@ -122,7 +118,7 @@ pbulklist_all_covid_only <- lapply(pbulklist, function(dge){
 # ---1
 saveRDS(pbulklist_d40_misc_plus_healthy, paste0(PBULKLIST_OUT_PATH, "tso_within_d40_misc_plus_healthy/pseudobulk_dgelists_unfiltered/UnSort-mergedcelltype.rds"))
 saveRDS(pbulklist_d40_covid_plus_healthy, paste0(PBULKLIST_OUT_PATH, "tso_within_d40_covid_plus_healthy/pseudobulk_dgelists_unfiltered/UnSort-mergedcelltype.rds"))
-saveRDS(pbulklist_d40_misc_plus_covid, paste0(PBULKLIST_OUT_PATH, "tso_within_d20_misc_plus_covid/pseudobulk_dgelists_unfiltered/UnSort-mergedcelltype.rds"))
+saveRDS(pbulklist_d40_misc_plus_covid, paste0(PBULKLIST_OUT_PATH, "tso_within_d40_misc_plus_covid/pseudobulk_dgelists_unfiltered/UnSort-mergedcelltype.rds"))
 saveRDS(pbulklist_all_misc_only, paste0(PBULKLIST_OUT_PATH, "all_timepoints_misc_only/pseudobulk_dgelists_unfiltered/UnSort-mergedcelltype.rds"))
 saveRDS(pbulklist_all_covid_only, paste0(PBULKLIST_OUT_PATH, "all_timepoints_covid_only/pseudobulk_dgelists_unfiltered/UnSort-mergedcelltype.rds"))
 

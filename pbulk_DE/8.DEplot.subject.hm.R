@@ -10,10 +10,11 @@ library(RColorBrewer)
 source("pbulk_DE/util/plot_subject_heatmap.R")
 
 ## pseudobulk heatmaps
-## Generates Figure 4D
-DGE_IN_PATH <- "pbulk_DE/all_samples/pseudobulk_dgelists_unfiltered/UnSort-mergedcelltype.rds"
-ESET_OUT_PATH <- "pbulk_DE/dge_eset_lists/pbulk_eset_list_normalized_UnSort_mergedcelltype_metafiltered.rds"
-FGSEA_IN_PATH <- "pbulk_DE/sample_groups/"
+## Generates Fig.4e
+DGE_IN_PATH <- "output/pbulk_DE/all_samples/pseudobulk_dgelists_unfiltered/UnSort-mergedcelltype.rds"
+dir.create("output/pbulk_DE/dge_eset_lists/", recursive = TRUE)
+ESET_OUT_PATH <- "output/pbulk_DE/dge_eset_lists/pbulk_eset_list_normalized_UnSort_mergedcelltype_metafiltered.rds"
+FGSEA_IN_PATH <- "output/pbulk_DE/sample_groups/"
 UnSort.mergedcelltype <- readRDS(DGE_IN_PATH)
 
 eset_list <- lapply(UnSort.mergedcelltype, function(dge){
@@ -44,16 +45,16 @@ eset_list_d40 <- lapply(eset_list, function(dge){
 })
 
 # read in selected_pathway_summary.xlsx
-pathways <- read.xlsx("pathway_summary.xlsx", sheet = "Sheet1", startRow = 1)
+pathways <- read.xlsx("input/pathway_summary.xlsx", sheet = "Sheet1", startRow = 1)
 # IFNsets <- filter(pathways, Category %in% c("Type I IFN response"))
 NFkBsets <- filter(pathways, Primary_gene_sets %in% c("HALLMARK_TNFA_SIGNALING_VIA_NFKB"))
 
 # read in FGSEA results tables
-misc_days_onset <- readRDS(paste0(FGSEA_IN_PATH, "all_timepoints_misc_only/results/fgsea_tables/UnSort_days_onset_fgseares.rds"))
-covid_days_onset <- readRDS(paste0(FGSEA_IN_PATH, "all_timepoints_covid_only/results/fgsea_tables/UnSort_days_onset_fgseares.rds"))
-misc_vs_HC <- readRDS(paste0(FGSEA_IN_PATH, "tso_within_d40_misc_plus_healthy/results/fgsea_tables/UnSort_misc_vs_healthy_fgseares.rds"))
-covid_vs_HC <- readRDS(paste0(FGSEA_IN_PATH, "tso_within_d40_covid_plus_healthy/results/fgsea_tables/UnSort_covid_vs_healthy_fgseares.rds"))
-misc_vs_covid <- readRDS(paste0(FGSEA_IN_PATH, "tso_within_d40_misc_plus_covid/results/fgsea_tables/UnSort_misc_vs_covid_fgseares.rds"))
+misc_days_onset <- readRDS(paste0(FGSEA_IN_PATH, "all_timepoints_misc_only/fgsea_tables/UnSort_days_onset_fgseares.rds"))
+covid_days_onset <- readRDS(paste0(FGSEA_IN_PATH, "all_timepoints_covid_only/fgsea_tables/UnSort_days_onset_fgseares.rds"))
+misc_vs_HC <- readRDS(paste0(FGSEA_IN_PATH, "tso_within_d40_misc_plus_healthy/fgsea_tables/UnSort_misc_vs_healthy_fgseares.rds"))
+covid_vs_HC <- readRDS(paste0(FGSEA_IN_PATH, "tso_within_d40_covid_plus_healthy/fgsea_tables/UnSort_covid_vs_healthy_fgseares.rds"))
+misc_vs_covid <- readRDS(paste0(FGSEA_IN_PATH, "tso_within_d40_misc_plus_covid/fgsea_tables/UnSort_misc_vs_covid_fgseares.rds"))
 
 ## UnSorted populations
 ### CD4_Mem NFkB ####
@@ -66,12 +67,13 @@ CD4_Mem_misc_vs_covid_NFkB <- misc_vs_covid$CD4_Mem %>% filter(pathway %in% NFkB
 CD4_Mem_misc_vs_HC_NFkB_LE <- unique(unlist(sapply(CD4_Mem_misc_vs_HC_NFkB$leadingEdge, function(x) str_split(x, pattern = ","))))
 CD4_Mem_covid_vs_HC_NFkB_LE <- unique(unlist(sapply(CD4_Mem_covid_vs_HC_NFkB$leadingEdge, function(x) str_split(x, pattern = ","))))
 CD4_Mem_misc_vs_covid_NFkB_LE <- unique(unlist(sapply(CD4_Mem_misc_vs_covid_NFkB$leadingEdge, function(x) str_split(x, pattern = ","))))
+Mono_Classical_misc_vs_covid_NFkB_LE <- unique(unlist(sapply(Mono_Classical_misc_vs_covid_NFkB$leadingEdge, function(x) str_split(x, pattern = ","))))
 
 CD4_Mem_mtx_co <- exprs(CD4_Mem)[CD4_Mem_misc_vs_covid_NFkB_LE, ]
 meta <- pData(CD4_Mem) %>% dplyr::arrange(Class,days_since_admission)
 CD4_Mem_mtx_co <- CD4_Mem_mtx_co[,rownames(meta)]
 
-# pdf("pbulk_DE/plots/subject_hm/CD4_Mem_misc_vs_covid_NFkB.pdf", width = 8, height = 4)
+# pdf("output/pbulk_DE/plots/CD4_Mem_misc_vs_covid_NFkB.pdf", width = 8, height = 4)
 subject.hm2(exprs_mtx = CD4_Mem_mtx_co, meta = meta, celltype = "CD4_Mem", module = "NFkB", 
             LEset1 = Mono_Classical_misc_vs_covid_NFkB_LE, LEset2 = CD4_Mem_misc_vs_covid_NFkB_LE)
 dev.off()
@@ -93,7 +95,7 @@ Mono_Classical_mtx_co <- exprs(Mono_Classical)[Mono_Classical_misc_vs_covid_NFkB
 meta <- pData(Mono_Classical) %>% dplyr::arrange(Class,days_since_admission)
 Mono_Classical_mtx_co <- Mono_Classical_mtx_co[,rownames(meta)]
 
-# pdf("pbulk_DE/plots/subject_hm/Mono_Classical_misc_vs_covid_NFkB.pdf", width = 8, height = 4)
+# pdf("output/pbulk_DE/plots/Mono_Classical_misc_vs_covid_NFkB.pdf", width = 8, height = 4)
 subject.hm2(exprs_mtx = Mono_Classical_mtx_co, meta = meta, celltype = "Mono_Classical", module = "NFkB", 
             LEset1 = Mono_Classical_misc_vs_covid_NFkB_LE, LEset2 = CD4_Mem_misc_vs_covid_NFkB_LE)
 dev.off()

@@ -6,13 +6,20 @@ library(data.table)
 
 # run fgsea for the pseudobulk DE results
 #Set paths ---------------------------------------------------------------
-TOPTAB_IN_PATH <- "pbulk_DE/sample_groups/"
+TOPTAB_IN_PATH <- "output/pbulk_DE/sample_groups/"
 
-SAMPLE_GROUP <- c("tso_within_d40_misc_plus_healthy/results/", 
-                  "tso_within_d40_covid_plus_healthy/results/", 
-                  "tso_within_d40_misc_plus_covid/results/", 
-                  "all_timepoints_misc_only/results/", 
-                  "all_timepoints_covid_only/results/")
+SAMPLE_GROUP <- c("tso_within_d40_misc_plus_healthy/", 
+                  "tso_within_d40_covid_plus_healthy/", 
+                  "tso_within_d40_misc_plus_covid/", 
+                  "all_timepoints_misc_only/", 
+                  "all_timepoints_covid_only/")
+
+dir.create(paste0(TOPTAB_IN_PATH, SAMPLE_GROUP[1], "fgsea_tables/UnSort/"), recursive = TRUE)
+dir.create(paste0(TOPTAB_IN_PATH, SAMPLE_GROUP[2], "fgsea_tables/UnSort/"), recursive = TRUE)
+dir.create(paste0(TOPTAB_IN_PATH, SAMPLE_GROUP[3], "fgsea_tables/UnSort/"), recursive = TRUE)
+dir.create(paste0(TOPTAB_IN_PATH, SAMPLE_GROUP[4], "fgsea_tables/UnSort/"), recursive = TRUE)
+dir.create(paste0(TOPTAB_IN_PATH, SAMPLE_GROUP[5], "fgsea_tables/UnSort/"), recursive = TRUE)
+
 
 COMBINED.GENESETS.IN.PATH <- "input/kegg_go_btm_reactome_foointerferon.rds"
 
@@ -175,7 +182,6 @@ saveRDS(fgseares.list, paste0(TOPTAB_IN_PATH, SAMPLE_GROUP[4], "fgsea_tables/UnS
 toptab_Unsort <- readRDS(paste0(TOPTAB_IN_PATH, SAMPLE_GROUP[5], "UnSort_days_onset_toptab.rds"))
 
 toptab <- toptab_Unsort
-toptab <- toptab_All
 
 celltypes = names(toptab)
 fgseares.list = list()

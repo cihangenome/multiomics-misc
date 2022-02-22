@@ -6,17 +6,20 @@ library(BiocParallel)
 library(readr)
 library(tidyverse)
 library(ggpubr)
-source("util/gsvadftoelist.R")
+source("pbulk_DE/util/gsvadftoelist.R")
 
 ### get GSVA score of the filtered pseudobulk objects ##############################################
 ### using LE genes of MIS-C vs COVID
 ### input is output from filtered and normalized pseudobulk objects
-### Generates Figure 4E
+### Generates Fig.4e
 ### UnSort ###
-DGELISTS_IN_PATH_UNSORT <- c("pbulk_DE/all_samples/pseudobulk_dgelists_normalized/UnSort-mergedcelltype_pseudobulk_dgelist_normalized.rds")
-DGELISTS_IN_PATH_UNFIL_UNSORT <- c("pbulk_DE/all_samples/pseudobulk_dgelists_unfiltered/UnSort-mergedcelltype.rds")
-OUT_DIR <- "pbulk_DE/gsva/"
+DGELISTS_IN_PATH_UNSORT <- c("output/pbulk_DE/all_samples/pseudobulk_dgelists_normalized/UnSort-mergedcelltype_pseudobulk_dgelist_normalized.rds")
+DGELISTS_IN_PATH_UNFIL_UNSORT <- c("output/pbulk_DE/all_samples/pseudobulk_dgelists_unfiltered/UnSort-mergedcelltype.rds")
+OUT_DIR <- "output/pbulk_DE/gsva/"
+dir.create(OUT_DIR, recursive = TRUE)
 
+COMBINED.GENESETS.IN.PATH <- "input/kegg_go_btm_reactome_foointerferon.rds"
+genesets <- readRDS(COMBINED.GENESETS.IN.PATH)
 genesets_NFkB <- genesets["HALLMARK_TNFA_SIGNALING_VIA_NFKB"]
 
 pbulk_list <- readRDS(DGELISTS_IN_PATH_UNSORT)
@@ -30,7 +33,7 @@ eset_list <- lapply(pbulk_list, function(dge){
 eset_list <- unlist(eset_list)
 
 # get fgsea results of LE genes from the MISC-COVID model
-FGSEA_IN_PATH_MISC <- file.path("pbulk_DE/sample_groups/tso_within_d40_misc_plus_covid/results/fgsea_tables/UnSort_misc_vs_covid_fgseares.rds")
+FGSEA_IN_PATH_MISC <- file.path("output/pbulk_DE/sample_groups/tso_within_d40_misc_plus_covid/fgsea_tables/UnSort_misc_vs_covid_fgseares.rds")
 
 fgsea_list_misc <- readRDS(FGSEA_IN_PATH_MISC)
 
@@ -67,7 +70,7 @@ gsva_esetlist <- df_to_gsva_elist(gsva_df = module.scores.df, meta_eset = unfilt
 saveRDS(gsva_esetlist, file.path(OUT_DIR, "miscvscovid_module_score_gsva_filtered_samples_genes.rds"))
 
 # plot pathway == "HALLMARK_TNFA_SIGNALING_VIA_NFKB"
-# Figure 4E
+# Fig. 4e
 module.scores.df2 <- read.csv(file.path(OUT_DIR, "miscvscovid_module_score_gsva_filtered_samples_genes_df.csv"), row.names = 1)
 celltype_selected <- c("CD4_Naive","CD4_Mem","CD8_Naive","CD8_Mem","NK_CD16hi","cDC","Mono_Classical","Mono_NonClassical")
 module.scores.NFkB <- filter(module.scores.df2, pathway == "HALLMARK_TNFA_SIGNALING_VIA_NFKB", 
@@ -84,7 +87,7 @@ p <- ggplot(module.scores.NFkB, aes(x=celltype, y=module.score, color = Class))+
   theme_bw()
 
 p
-# ggsave(p, filename = "plots/figures/mono_NFkB_gsva.pdf", device = "pdf", width = 8.5, height = 6)
+# ggsave(p, filename = "output/plots/mono_NFkB_gsva.pdf", device = "pdf", width = 8.5, height = 6)
 
 
 

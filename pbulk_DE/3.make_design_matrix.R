@@ -8,7 +8,7 @@ library(edgeR)
 source("pbulk_DE/util/limma_DE_functions.R")
 source("pbulk_DE/util/fix_single_level_contrasts.R")
 
-DGELIST_IN_PATH <- "pbulk_DE/sample_groups/"
+DGELIST_IN_PATH <- "output/pbulk_DE/sample_groups/"
 SAMPLE_GROUP <- c("tso_within_d40_misc_plus_healthy/pseudobulk_dgelists_normalized/", 
                   "tso_within_d40_covid_plus_healthy/pseudobulk_dgelists_normalized/",
                   "tso_within_d40_misc_plus_covid/pseudobulk_dgelists_normalized/", 
@@ -25,7 +25,6 @@ FORMULA <- "~0 + Class + Age"
 FORMULA <- as.formula(FORMULA)
 
 dge <- dge_Unsort
-dge <- dge_All
 
 celltypes = names(dge)
 design.matrix.list = list()
@@ -61,7 +60,7 @@ design.matrix.list[[i]] = design
 }
 ###
 
-saveRDS(design.matrix.list, "pbulk_DE/sample_groups/tso_within_d40_misc_plus_healthy/results/UnSort_misc_vs_healthy_design.rds")
+saveRDS(design.matrix.list, "output/pbulk_DE/sample_groups/tso_within_d40_misc_plus_healthy/UnSort_misc_vs_healthy_design.rds")
 
 
 
@@ -74,7 +73,6 @@ FORMULA <- "~0 + Class + Age"
 FORMULA <- as.formula(FORMULA)
 
 dge <- dge_Unsort
-dge <- dge_All
 
 celltypes = names(dge)
 design.matrix.list = list()
@@ -109,7 +107,7 @@ for (i in celltypes) {
 }
 ###
 
-saveRDS(design.matrix.list, "pbulk_DE/sample_groups/tso_within_d40_covid_plus_healthy/results/UnSort_covid_vs_healthy_design.rds")
+saveRDS(design.matrix.list, "output/pbulk_DE/sample_groups/tso_within_d40_covid_plus_healthy/UnSort_covid_vs_healthy_design.rds")
 
 
 
@@ -124,7 +122,6 @@ FORMULA <- "~0 + Class + days_since_admission + Age"
 FORMULA <- as.formula(FORMULA)
 
 dge <- dge_Unsort
-dge <- dge_All
 
 celltypes = names(dge)
 design.matrix.list = list()
@@ -160,7 +157,7 @@ for (i in celltypes) {
 }
 ###
 
-saveRDS(design.matrix.list, "pbulk_DE/sample_groups/tso_within_d40_misc_plus_covid/results/UnSort_misc_vs_covid_design.rds")
+saveRDS(design.matrix.list, "output/pbulk_DE/sample_groups/tso_within_d40_misc_plus_covid/UnSort_misc_vs_covid_design.rds")
 
 
 
@@ -174,7 +171,6 @@ FORMULA <- "~days_since_admission + Age"
 FORMULA <- as.formula(FORMULA)
 
 dge <- dge_Unsort
-dge <- dge_All
 
 celltypes = names(dge)
 design.matrix.list = list()
@@ -210,7 +206,7 @@ for (i in celltypes) {
 }
 ###
 
-saveRDS(design.matrix.list, "pbulk_DE/sample_groups/all_timepoints_misc_only/results/UnSort_days_onset_design.rds")
+saveRDS(design.matrix.list, "output/pbulk_DE/sample_groups/all_timepoints_misc_only/UnSort_days_onset_design.rds")
 
 
 #######################################
@@ -222,7 +218,6 @@ FORMULA <- "~days_since_admission + Age"
 FORMULA <- as.formula(FORMULA)
 
 dge <- dge_Unsort
-dge <- dge_All
 
 # remove HSC since only 1 or 2 samples available
 celltypes = names(dge)[-which(names(dge) == "HSC")]
@@ -258,7 +253,7 @@ for (i in celltypes) {
 }
 ###
 
-saveRDS(design.matrix.list, "pbulk_DE/sample_groups/all_timepoints_covid_only/results/UnSort_days_onset_design.rds")
+saveRDS(design.matrix.list, "output/pbulk_DE/sample_groups/all_timepoints_covid_only/UnSort_days_onset_design.rds")
 
 
 

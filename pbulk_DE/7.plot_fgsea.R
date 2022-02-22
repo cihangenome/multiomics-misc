@@ -5,14 +5,20 @@ source("pbulk_DE/util/plot_fgsea_functions.R")
 #########################################
 #### Plot fgsea #########################
 #########################################
-## generates Figures 4B, 4C, S5D
-INPUT_PATH <- "pbulk_DE/sample_groups/"
+## Generates Fig.4b, 4c, Extended Data Fig.5c
+INPUT_PATH <- "output/pbulk_DE/sample_groups/"
 
-SAMPLE_GROUP <- c("tso_within_d40_misc_plus_healthy/results/", 
-                  "tso_within_d40_covid_plus_healthy/results/",
-                  "tso_within_d40_misc_plus_covid/results/", 
-                  "all_timepoints_misc_only/results/")
+SAMPLE_GROUP <- c("tso_within_d40_misc_plus_healthy/", 
+                  "tso_within_d40_covid_plus_healthy/", 
+                  "tso_within_d40_misc_plus_covid/", 
+                  "all_timepoints_misc_only/", 
+                  "all_timepoints_covid_only/")
 
+dir.create(paste0(TOPTAB_IN_PATH, SAMPLE_GROUP[1], "fgsea_bubble/"), recursive = TRUE)
+dir.create(paste0(TOPTAB_IN_PATH, SAMPLE_GROUP[2], "fgsea_bubble/"), recursive = TRUE)
+dir.create(paste0(TOPTAB_IN_PATH, SAMPLE_GROUP[3], "fgsea_bubble/"), recursive = TRUE)
+dir.create(paste0(TOPTAB_IN_PATH, SAMPLE_GROUP[4], "fgsea_bubble/"), recursive = TRUE)
+dir.create(paste0(TOPTAB_IN_PATH, SAMPLE_GROUP[5], "fgsea_bubble/"), recursive = TRUE)
 
 selected.pathways <- read.xlsx("input/pathway_summary.xlsx", sheet = "Sheet1")
 celltypes <- c("B_Naive", "B_Mem", "Plasmablast", "CD4_Naive", "CD4_Mem", "CD4_isobinding",
@@ -23,6 +29,7 @@ celltypes <- c("B_Naive", "B_Mem", "Plasmablast", "CD4_Naive", "CD4_Mem", "CD4_i
 cellgroups = rep(c("B","CD4","CD8","otherT","NK","Mono","other"),c(3,3,2,4,2,3,4))
 cellgroup <- data.frame(celltype = celltypes, 
                         cellgroup = cellgroups)
+IFNsets <- filter(selected.pathways, Category == "Type I IFN response")
 
 #########################
 ### MIS-C vs HC d40 #####
@@ -100,6 +107,9 @@ fgseares.Unsort <- RbindGseaResultList(fgseares.list.Unsort, NES_filter = 0, pad
 fgseares.selected <- fgseares.Unsort %>% 
   filter(pathway %in% selected.pathways$Primary_gene_sets) %>% 
   left_join(selected.pathways, by = c("pathway" = "Primary_gene_sets"))
+fgseares.selected.IFN.misctime <- fgseares.Unsort %>% 
+  filter(pathway %in% IFNsets$Primary_gene_sets) %>% 
+  left_join(IFNsets, by = c("pathway" = "Primary_gene_sets"))
 
 pdf(file = paste0(INPUT_PATH, SAMPLE_GROUP[4], "fgsea_bubble/UnSort_days_onset_fgseares_selected.pdf"), width = 10, height = 8)
 GSEABubblePlot_selected(fgseares.selected)
@@ -121,13 +131,16 @@ fgseares.Unsort <- RbindGseaResultList(fgseares.list.Unsort, NES_filter = 0, pad
 fgseares.selected <- fgseares.Unsort %>% 
   filter(pathway %in% selected.pathways$Primary_gene_sets) %>% 
   left_join(selected.pathways, by = c("pathway" = "Primary_gene_sets"))
+fgseares.selected.IFN.covidtime <- fgseares.Unsort %>% 
+  filter(pathway %in% IFNsets$Primary_gene_sets) %>% 
+  left_join(IFNsets, by = c("pathway" = "Primary_gene_sets"))
 
 pdf(file = paste0(INPUT_PATH, SAMPLE_GROUP[5], "fgsea_bubble/UnSort_days_onset_fgseares_selected.pdf"), width = 10, height = 8)
 GSEABubblePlot_selected(fgseares.selected)
 dev.off()
 
 
-### Figure 4C
+### Fig.4c
 # plot IFN time change for MISC and COVID, showing all cell populations
 fgseares.selected.IFN.misctime <- dplyr::full_join(fgseares.selected.IFN.misctime, fgseares.selected.IFN.covidtime[,c(1:2,6:7)], 
                                                    by = c("celltype","pathway","cellgroup","Category"))

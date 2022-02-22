@@ -9,12 +9,12 @@ library(tidyverse)
 ### make contrast matrix -- contrast fit -- get top table of DE genes ####
 ##########################################################################
 
-DESIGN_MATRIX_PATH <- "pbulk_DE/sample_groups/"
-SAMPLE_GROUP <- c("tso_within_d40_misc_plus_healthy/results/", 
-                  "tso_within_d40_covid_plus_healthy/results/",
-                  "tso_within_d40_misc_plus_covid/results/",
-                  "all_timepoints_misc_only/results/", 
-                  "all_timepoints_covid_only/results/")
+DESIGN_MATRIX_PATH <- "output/pbulk_DE/sample_groups/"
+SAMPLE_GROUP <- c("tso_within_d40_misc_plus_healthy/", 
+                  "tso_within_d40_covid_plus_healthy/",
+                  "tso_within_d40_misc_plus_covid/",
+                  "all_timepoints_misc_only/", 
+                  "all_timepoints_covid_only/")
 
 
 #########################
