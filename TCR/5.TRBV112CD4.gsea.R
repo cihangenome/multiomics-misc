@@ -1,3 +1,5 @@
+# this is tested using R 3.6.1 on a high-performance computing node with 8 cores and 160 gb of ram. 
+# Use seurat v3.1.0 on Conda environment
 library(Seurat) #load Seurat 3.1
 library(matrixStats)
 library(tidyverse)
@@ -10,7 +12,7 @@ library(fgsea)
 #################################
 ### TRBV11-2 CD4 T cell GSEA ####
 #################################
-# Generates Figures 5F
+# Generates Extended Data Fig.6f
 # This file need the Seurat object: misc_SeuratObj_submission.rds downloaded in input folder
 ### within CD4 clustering #################################################################
 merge <- readRDS("input/misc_SeuratObj_submission.rds")
@@ -62,7 +64,8 @@ fgseaRes.df.filtered <- fgseaRes.df %>% filter(padj < 0.2) %>%
 fgseaRes.df$leadingEdge <- vapply(fgseaRes.df$leadingEdge, paste, collapse = ", ", character(1L))
 fgseaRes.df.filtered$leadingEdge <- vapply(fgseaRes.df.filtered$leadingEdge, paste, collapse = ", ", character(1L))
 
-# write.csv(fgseaRes.df.filtered, "output/TRBV11-2.misc.CD4.fgsea.enrich.padj0.2.csv")
+write.csv(fgseaRes.df.filtered, "output/TRBV11-2.misc.CD4.fgsea.enrich.padj0.2.csv")
+
 fgseaRes.df.apoptotic <- fgseaRes.df.filtered %>% 
   filter(grepl("apop|APOP|Apop", pathway)) %>%
   filter(pathway %in% c("reactome_Regulation of Apoptosis", "reactome_Apoptosis", 
@@ -76,7 +79,7 @@ fgseaRes.df.apoptotic <- fgseaRes.df.filtered %>%
 # GSEABubblePlot(fgseaRes.df.apoptotic)
 # dev.off()
 
-# Figure 5F
+# Extended Data Fig.6f
 p=ggplot(fgseaRes.df.apoptotic, aes(NES,forcats::fct_reorder(pathway,NES)))+
   geom_segment(aes(xend=0,yend=pathway, color=NES), size = 1)+
   geom_point(aes(color=NES,size=n_logp))+
@@ -88,7 +91,7 @@ p=ggplot(fgseaRes.df.apoptotic, aes(NES,forcats::fct_reorder(pathway,NES)))+
   theme(axis.text.y = element_text(size = 8, face = "bold", color = "black")) + 
   theme(axis.text.x = element_text(size = 8.5, face = "bold", color = "black")) + 
   ylab(NULL)
-ggsave(plot = p, file = "output/TRBV11-2.misc.CD4.fgsea.enrichment.apoptotic.bar.pdf", useDingbats = FALSE, width = 11, height = 3)
+ggsave(plot = p, file = "output/plots/TRBV11-2.misc.CD4.fgsea.enrichment.apoptotic.bar.pdf", useDingbats = FALSE, width = 11, height = 3)
 
 
 

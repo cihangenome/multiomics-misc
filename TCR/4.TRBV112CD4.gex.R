@@ -1,13 +1,16 @@
+# this is tested using R 3.6.1 on a high-performance computing node with 8 cores and 160 gb of ram. 
+# Use seurat v3.1.0 on Conda environment
 library(Seurat) #load Seurat 3.1
 library(tidyverse)
 library(pheatmap)
 library(viridis)
 library(reshape2)
+library(pheatmap)
 
 ######################################
 ### TRBV11-2 CD4 T cell phenotype ####
 ######################################
-# Generates Figures 5D,5E
+# Generates Extended Data Fig.6d, 6e
 # This file need the Seurat object: misc_SeuratObj_submission.rds downloaded in input folder
 ### within CD4 clustering #################################################################
 merge <- readRDS("input/misc_SeuratObj_submission.rds")
@@ -39,9 +42,9 @@ TRBVmarker.rna = FindMarkers(merge.CD4.UnSort.misc, ident.1 = "TRBV11-2", assay 
 # TRBVmarker.rna.genes <- rownames(TRBVmarker.rna[TRBVmarker.rna$p_val<0.2,])
 
 
-##########################################################
-### Plot average heatmap of marker genes -- Figure 5D ####
-##########################################################
+#####################################################################
+### Plot average heatmap of marker genes -- Extended Data Fig.6d ####
+#####################################################################
 # MIS-C TRBV11-2 vs non-TRBV11-2
 TRBVmarker.rna <- TRBVmarker.rna %>% rownames_to_column("gene")
 
@@ -49,6 +52,7 @@ merge.CD4.UnSort.misc$TRBV[is.na(merge.CD4.UnSort.misc$TRBV)] <- "ND"
 merge.CD4.UnSort.misc$TRBV112 <- merge.CD4.UnSort.misc$TRBV == "TRBV11-2"
 
 # plot all 4 groups, but use the DE genes from TRBV11-2_MISC vs nonTRBV11-2_MISC
+merge.CD4.UnSort$TRBV112_Class <- paste(merge.CD4.UnSort$TRBV112, merge.CD4.UnSort$Class, sep = "_")
 Idents(merge.CD4.UnSort) <- "TRBV112_Class"
 avg.CD4.UnSort <- data.frame(log1p(AverageExpression(merge.CD4.UnSort, verbose = TRUE)$RNA))
 avg.CD4.UnSort$gene <- rownames(avg.CD4.UnSort)
@@ -63,9 +67,9 @@ pheatmap(avg.CD4.UnSort.marker[,1:6], cluster_cols = FALSE,
 dev.off()
 
 
-##########################################################
-### Plot average heatmap of CITE markers -- Figure 5E ####
-##########################################################
+#####################################################################
+### Plot average heatmap of CITE markers -- Extended Data Fig.6e ####
+#####################################################################
 # MIS-C TRBV11-2 vs non-TRBV11-2
 TRBVmarker.cite.selected <- filter(TRBVmarker.cite, p_val<0.1)
 TRBVmarker.cite.sig <- filter(TRBVmarker.cite, p_val_adj<0.2)
@@ -79,7 +83,7 @@ Idents(merge.CD4.UnSort) <- "TRBV112_Class"
 avg.CD4.UnSort.cite <- data.frame(log1p(AverageExpression(merge.CD4.UnSort, verbose = FALSE)$CITE))
 avg.CD4.UnSort.cite$marker <- rownames(avg.CD4.UnSort.cite)
 
-avg.CD4.UnSort.cite.marker <- filter(avg.CD4.UnSort.cite, marker %in% features)
+avg.CD4.UnSort.cite.marker <- filter(avg.CD4.UnSort.cite, marker %in% rownames(TRBVmarker.cite.selected))
 avg.CD4.UnSort.cite.marker <- avg.CD4.UnSort.cite.marker[,c("FALSE_HC","FALSE_COVID","FALSE_MIS.C","TRUE_HC","TRUE_COVID","TRUE_MIS.C")]
 
 avg.CD4.UnSort.cite.marker.sig <- avg.CD4.UnSort.cite.marker[rownames(avg.CD4.UnSort.cite.marker) %in% rownames(TRBVmarker.cite.sig),]

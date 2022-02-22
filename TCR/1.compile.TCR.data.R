@@ -10,7 +10,7 @@ library(reshape2)
 # Seurat object: misc_SeuratObj_submission.rds
 # TCR raw data: TCR_filtered_contig_annotations.csv 
 # downloaded in input folder
-
+# But the TCR data is already included in the Seurat object, this is just an illustration of the process
 SEURAT_META_IN_PATH <- "input/misc_SeuratObj_submission.rds"
 B4_TENX_IN_PATH <- "input/TCR_filtered_contig_annotations.csv"
 OUT_PATH <- "output/TCR_tenx_filtered_anno_wofiltered_celltype.rds"
@@ -31,7 +31,7 @@ b4_tenx$tenx_barcode <- barcodes
 
 meta <- merge@meta.data
 meta$Class <- factor(meta$Class, levels = c("HC","COVID","MIS-C"))
-out_dat <- left_join(meta, meta, by = c("tenx_barcode" = "NewBarcode"))
+out_dat <- left_join(b4_tenx, meta, by = c("tenx_barcode" = "NewBarcode"))
 saveRDS(out_dat, OUT_PATH)
 
 ####################################################################################
@@ -72,7 +72,7 @@ colnames(tcr_combined_filtered) <- c("barcode", "sample", "ID", "TCR1", "cdr3_aa
                                      "CTaa_tcr", "CTstrict_tcr", "cellType_tcr", "tenx_barcode", 
                                      "TRAV", "TRAJ", "TRBV", "TRBJ", "TRBC")
 
-meta <- merge@meta.data
+meta <- merge@meta.data[,c(1:70, 84:87)] # didn't select the TCR columns in the scMeta
 meta$Class <- factor(meta$Class, levels = c("HC","COVID","MIS-C"))
 out_dat_combined <- left_join(tcr_combined_filtered, meta, by = c("tenx_barcode" = "NewBarcode"))
 

@@ -8,6 +8,7 @@ library(tidyverse)
 ######################################
 
 ### Seurat object from output of BCR/1.add.BCR.meta.R
+# the TCR data is already included in the Seurat object, this is just an illustration of the process
 merge <- readRDS("input/B4merge.Clustered.COVID.QCd.wBCRmeta.rds")
 
 # read in TCR data
