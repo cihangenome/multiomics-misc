@@ -8,11 +8,11 @@ library(reshape2)
 
 ### label transfer #######################################################################
 # transfer WCT labels from COVID - Brescia batches 1-3
-# download the seurat object from https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE161918
+# download the seurat object of adult data from https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE161918
 Brescia_merge <- readRDS("input/brescia_paper1_seurat.rds")
 Brescia_merge <- NormalizeData(Brescia_merge)
 Brescia_merge <- FindVariableFeatures(Brescia_merge, selection.method = "vst", nfeatures = 2000, verbose = TRUE)
-merge <- readRDS("B4merge.Clustered.COVID.QCd.rds")
+merge <- readRDS("misc_SeuratObj_submission.rds")
 merge <- NormalizeData(merge)
 merge <- FindVariableFeatures(merge, selection.method = "vst", nfeatures = 2000, verbose = TRUE)
 
@@ -27,7 +27,7 @@ predictions <- TransferData(anchorset = merge.anchors, refdata = Brescia_merge$W
 merge <- AddMetaData(merge, metadata = predictions)
 
 # plot the overlap of predicted transfer id with annotated id
-## Figure S5A
+## Extended Data Fig.5a
 celltype <- data.frame(table(merge$mergedcelltype, merge$predicted.id)) %>%
   left_join(data.frame(table(merge$mergedcelltype)), by = "Var1") %>%
   mutate(prct = Freq.x/Freq.y*100) %>%

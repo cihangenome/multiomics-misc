@@ -1,6 +1,4 @@
 #this is tested using R 3.6.1 on a high-performance computing node with 8 cores and at least 160 gb of ram. 
-.libPaths(c("/hpcdata/sg/sg_data/users/liuc19/condaenvs/Seurat3.1/lib/R/library",
-            "/sysapps/cluster/software/Anaconda2/5.3.0/lib64/R/site-library"))
 library("Seurat") #load Seurat 3.1
 library("dplyr")
 library("matrixStats")
@@ -62,7 +60,7 @@ FeaturePlot(B4merge, reduction = "umap",
 write.csv(file = "B4merge_CellsPerSamplebyCluster.csv", table(B4merge$adt_snn_res.2, B4merge$sample_id))
 
 # put in cluster annotations
-ClusterNames = read.csv("input/ClusterNames.B4.20201006.csv", header=TRUE)
+ClusterNames = read.csv("input/ClusterNames.B4.202010831.csv", header=TRUE)
 
 Idents(B4merge) <- "adt_snn_res.2"
 cluster.ids <- ClusterNames$cluster
@@ -86,14 +84,10 @@ pdf("umap.labelled.all.pdf", width = 8, height = 6)
 DimPlot(B4merge, pt.size = 0.5, reduction = "umap", label = TRUE) + NoLegend()
 dev.off()
 
-table(B4merge_unt$hirescelltype)
-table(B4merge_unt$mergedcelltype)
-table(B4merge_unt$coarsecelltype)
 
 
 # B4merge <- DietSeurat(B4merge)
-saveRDS(B4merge, file = "B4merge.Clustered.20201006.rds")
-B4merge <- readRDS("B4merge.Clustered.20201006.rds")
+saveRDS(B4merge, file = "B4merge.Clustered.rds")
 
 
 ### Cluster QC: celltypes to remove contamination cells ----------------------------------------------------------------------------------------------------------------------------

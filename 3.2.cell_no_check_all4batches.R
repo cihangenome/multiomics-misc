@@ -28,9 +28,9 @@ samplemetadata <- samplemetadata %>%
 merge_cell_UnSort_WCTcourse <- data.frame(table(merge_unt$sample_id, merge_unt$predicted.id)) %>% 
   dplyr::group_by(Var1) %>% dplyr::mutate(ratio = Freq/sum(Freq))
 
-dir.create("./label_transfer", recursive = TRUE)
-saveRDS(merge_cell_UnSort_WCTcourse, "label_transfer/unt_transfWCTcourse_sample_freq.rds")
-merge_cell_UnSort_WCTcourse <- readRDS("label_transfer/unt_transfWCTcourse_sample_freq.rds")
+dir.create("./output/label_transfer", recursive = TRUE)
+saveRDS(merge_cell_UnSort_WCTcourse, "output/label_transfer/unt_transfWCTcourse_sample_freq.rds")
+merge_cell_UnSort_WCTcourse <- readRDS("output/label_transfer/unt_transfWCTcourse_sample_freq.rds")
 
 merge_cell_UnSort_WCTcourse <- addcellmeta(merge_cell_UnSort_WCTcourse)
 merge_cell_UnSort_WCTcourse$Class <- replace(as.character(merge_cell_UnSort_WCTcourse$Class), 
@@ -78,7 +78,7 @@ batch1_4_freq$days_since_symptom_onset <- as.numeric(as.character(batch1_4_freq$
 
 
 ### use only the first timepoint for each subject (T0)
-### Figure S5B
+### Extended Data Fig.5b
 df_T0 <- filter(batch1_4_freq, Timepoint %in% c("T0","HC")) %>%
   filter(variable %in% c("Mono_Classical","Mono_NonClassical","NK_CD16hi","gammadeltaT",
                          "MAIT","pDC","cDC","TissuResMemT", "Platelets", "B_Naive",
@@ -90,7 +90,7 @@ p1 <- ggplot(df_T0, aes(x = Class, y = value, color = Class))+
   # ggsci::scale_fill_npg(name="Class",alpha = 0.5) +
   scale_color_manual(values = c("HC" = "#6664c0", "PC1_low" = "#73bde0", "PC1_high" = "#e1bd76",
                                 "ped.HC" = "#0000AC", "ped.COVID" = "#00AFBB", "MIS-C" = "#E7B800"))+
-  stat_compare_means(comparisons = my_comparisons,method = "wilcox.test", )+
+  stat_compare_means(comparisons = my_comparisons,method = "wilcox.test")+
   facet_wrap(~variable, scales = "free")+
   theme_bw()+
   theme(axis.text.x = element_text(angle = 30,hjust=1), text = element_text(size=18))
