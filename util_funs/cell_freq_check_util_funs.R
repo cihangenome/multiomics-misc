@@ -15,7 +15,7 @@ addcellmeta <- function(df){
   df$Timepoint2 <- plyr::mapvalues(x = df$Var1, 
                                    from = samplemetadata$sample_id, to = samplemetadata$Timepoint2)
   df$days_since_symptom_onset <- plyr::mapvalues(x = df$Var1, 
-                                                 from = samplemetadata$sample_id, to = samplemetadata$days_since_symptom_onset)
+                                                 from = samplemetadata$sample_id, to = samplemetadata$days_since_admission)
   # df$B_Mem.shannon <- plyr::mapvalues(x = df$Var1, 
   #                                     from = samplemetadata$sample_id, to = samplemetadata$B_Mem.shannon)
   # df$B_Naive.shannon <- plyr::mapvalues(x = df$Var1, 
